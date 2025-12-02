@@ -29,8 +29,10 @@ env/
 Thumbs.db
 
 # DuckDB (ha generált/újragenerálható)
-#*.duckdb
-#*.duckdb.wal
+databases/*.duckdb
+databases/*.duckdb.wal
+*.duckdb
+*.duckdb.wal
 
 # JSON output (ha NEM akarod verziózni a letöltött adatokat)
 #data/*.json
