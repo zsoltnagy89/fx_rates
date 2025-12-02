@@ -28,17 +28,17 @@ env/
 .DS_Store
 Thumbs.db
 
-# DuckDB (ha generált/újragenerálható)
+# DuckDB
 databases/*.duckdb
 databases/*.duckdb.wal
 *.duckdb
 *.duckdb.wal
 
-# JSON output (ha NEM akarod verziózni a letöltött adatokat)
-#data/*.json
+# JSON output (no need to push remote)
+jsons
 
-# Environment variables (sose pushold)
+# Environment variables (never push)
 .env
 
-# Egyéb nagy bináris / cache fájlok
+# Other big binary files
 *.log
