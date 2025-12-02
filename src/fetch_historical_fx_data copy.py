@@ -17,12 +17,12 @@ print("API KEY loaded:", access_key is not None)
 # Endpoint
 endpoint = 'timeframe'
 
-# JSON mappa létrehozása a projekt root alapján
+# Create JSON folder in projects root
 script_dir = Path(__file__).parent.resolve()
 json_dir = script_dir.parent / "jsons" / "fx_jsons"
 json_dir.mkdir(parents=True, exist_ok=True)
 
-# Évek 1999 → tavaly
+# Define timeframe of interest
 start_year = 1999
 current_year = date.today().year
 
