@@ -14,3 +14,10 @@ Projekt struktura:
 - src --> vegleges production ready python scriptek
 - .env.example --> egy demo .env file, hogy milyen key-ekre van szukseg a futatashoz
 - requirements.txt --> venv blueprint
+
+How to use?
+- pull the repo
+- create a venv from requirements.txt
+- run the src/fetch_historical_fx_data.py to get the historical json files
+- run the src/fetch_new_fx_data.py to get the lates year's json file
+- 
