@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: raw
+    database: currency_rates
+    schema: raw
+    tables:
+      - name: raw_ingested_data
+        description: "Raw currency rate JSON data ingested daily"
+        columns:
+          - name: success
+          - name: terms
+          - name: privacy
+          - name: timeframe
+          - name: start_date
+          - name: end_date
+          - name: source
+          - name: quotes
+          - name: filename
+          - name: loaded_at_utc
+          - name: file_name

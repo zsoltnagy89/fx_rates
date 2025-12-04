@@ -42,3 +42,6 @@ jsons
 
 # Other big binary files
 *.log
+
+# dbt related
+dbt/logs/
