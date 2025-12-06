@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: stg_currency_rates
+    columns:
+      - name: quotes
+        tests:
+          - not_null
