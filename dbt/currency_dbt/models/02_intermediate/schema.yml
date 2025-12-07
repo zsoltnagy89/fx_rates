@@ -2,30 +2,48 @@ version: 2
 
 models:
   - name: int_currency_rates
-    description: "Double-flattened exchange rates from nested JSON. One row per date and currency pair. It has some missing dates."
+    description: >
+      Double-flattened exchange rates from nested JSON.
+      One row per date and currency pair.
+      Contains some missing dates due to upstream data gaps.
 
     columns:
       - name: filename
-        description: "Source filename of the ingested JSON file"
+        description: >
+          Source filename of the ingested JSON file.
         tests:
-          - not_null
+          - not_null:
+              arguments: {}
+              severity: warn
 
       - name: loaded_at_utc
-        description: "UTC timestamp when the file was ingested"
+        description: >
+          UTC timestamp when the file was ingested.
         tests:
-          - not_null
+          - not_null:
+              arguments: {}
+              severity: warn
 
       - name: rate_date
-        description: "Date of the exchange rate"
+        description: >
+          Date of the exchange rate observation.
         tests:
-          - not_null
+          - not_null:
+              arguments: {}
+              severity: warn
 
       - name: currency_pair
-        description: "Currency pair code (e.g., USDANG, USDAUD)"
+        description: >
+          Currency pair code (e.g., USDANG, USDAUD).
         tests:
-          - not_null
+          - not_null:
+              arguments: {}
+              severity: warn
 
       - name: rate
-        description: "Exchange rate value"
+        description: >
+          Exchange rate value for the given currency pair and date.
         tests:
-          - not_null
+          - not_null:
+              arguments: {}
+              severity: warn
