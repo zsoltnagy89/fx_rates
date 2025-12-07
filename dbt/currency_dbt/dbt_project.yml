@@ -30,12 +30,15 @@ clean-targets:         # directories to be removed by `dbt clean`
 # directory as views. These settings can be overridden in the individual model
 # files using the `{{ config(...) }}` macro.
 models:
-  staging:
-    # just lightweight landing tables
-    +materialized: ephemeral
-  intermediate:
-    # main transformation layer
-    +materialized: view
-  marts:
-    # ready-to-us tables, final products to BI
-    +materialized: table
+  currency_rate:  # package name
+    +materialized: view  # default materialization
+
+    01_staging:
+      # just lightweight landing tables
+      +materialized: ephemeral
+    02_intermediate:
+      # main transformation layer
+      +materialized: view
+    03_marts:
+      # ready-to-us tables, final products to BI
+      +materialized: table

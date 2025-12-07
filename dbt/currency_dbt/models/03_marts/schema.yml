@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: mart_currency_fx_sek
+    description: >
+      Daily historical FX rates converted to SEK for a selected set of currencies,
+      enriched with long-horizon risk metrics such as rolling extremes and drawdowns.
+      This table is optimized for long-term investment analysis and risk evaluation.
+
+    columns:
+      - name: fx_rate_sk
+        description: >
+          Surrogate primary key generated from rate_date and currency.
+        tests:
+          - not_null:
+              arguments: {}
+              severity: warn
+          - unique:
+              arguments: {}
+              severity: warn
+
+      - name: rate_date
+        description: >
+          Calendar date of the FX observation.
+        tests:
+          - not_null:
+              arguments: {}
+              severity: warn
+
+      - name: currency
+        description: >
+          Currency code expressed relative to SEK (e.g. USD, EUR, GBP, CHF, NOK).
+        tests:
+          - not_null:
+              arguments: {}
+              severity: warn
+
+      - name: rate
+        description: >
+          FX rate expressed as units of target currency per 1 SEK.
+        tests:
+          - not_null:
+              arguments: {}
+              severity: warn
+
+      - name: loaded_at_utc
+        description: >
+          Timestamp indicating when the raw FX record was ingested.
+        tests:
+          - not_null:
+              arguments: {}
+              severity: warn
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - rate_date
+              - currency
+          severity: warn
