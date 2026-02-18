@@ -27,8 +27,11 @@ def main():
 
     # -----------------------------
     # 1) Connect to DuckDB
-    #    (it creates the DB file automatically if missing)
+    #    (it creates the DB file automatically if missing and the parent folder is exist!)
     # -----------------------------
+    # Ensure database directory exists
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+
     con = duckdb.connect(str(DB_PATH))
     print("Connected to DuckDB.")
 
@@ -48,18 +51,24 @@ def main():
     print("Load timestamp (UTC):", load_ts)
 
     # -----------------------------
-    # 4) Drop table → refreshed daily
+    # 4) Ensure schema exists
+    # -----------------------------
+    print(f"Ensuring schema exists: {SCHEMA_NAME}")
+    con.execute(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA_NAME}")
+
+    # -----------------------------
+    # 5) Drop table → refreshed daily
     # -----------------------------
     print(f"Dropping existing table if exists: {SCHEMA_NAME}.{TABLE_NAME}")
     con.execute(f"DROP TABLE IF EXISTS {SCHEMA_NAME}.{TABLE_NAME}")
 
     # -----------------------------
-    # 5) Read all JSON into a single table
+    # 6) Read all JSON into a single table
     # -----------------------------
     print("Ingesting JSON files into DuckDB…")
 
     con.execute(f"""
-        CREATE TABLE IF NOT EXISTS {SCHEMA_NAME}.{TABLE_NAME} AS
+        CREATE TABLE {SCHEMA_NAME}.{TABLE_NAME} AS
         SELECT 
             *,
             '{load_ts}' AS loaded_at_utc,
@@ -70,7 +79,7 @@ def main():
     print("Ingestion completed.")
 
     # -----------------------------
-    # 6) Row count QC
+    # 7) Row count QC
     # -----------------------------
     rowcount = con.execute(
         f"SELECT COUNT(*) FROM {SCHEMA_NAME}.{TABLE_NAME}"
@@ -79,7 +88,7 @@ def main():
     print("Number of rows ingested:", rowcount)
 
     # -----------------------------
-    # 7) Checkpoint & close
+    # 8) Checkpoint & close
     # -----------------------------
     con.execute("CHECKPOINT;")
     con.close()
