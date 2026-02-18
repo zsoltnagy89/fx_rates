@@ -16,8 +16,14 @@ Projekt struktura:
 - requirements.txt --> venv blueprint
 
 How to use?
+1. Fetch FX data
 - pull the repo
-- create a venv from requirements.txt
+- create a venv to src in from requirements_src.txt
 - run the src/fetch_historical_fx_data.py to get the historical json files
 - run the src/fetch_new_fx_data.py to get the lates year's json file
-- 
+
+2. Notebooks
+- create a venv to notebooks in from requirements_notebooks.txt
+- don't forget to register your venv kernel's and restart vs code
+    - https://web.archive.org/web/20240430135149/https://anbasile.github.io/posts/2017-06-25-jupyter-venv/
+- run notebooks
