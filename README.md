@@ -27,3 +27,11 @@ How to use?
 - don't forget to register your venv kernel's and restart vs code
     - https://web.archive.org/web/20240430135149/https://anbasile.github.io/posts/2017-06-25-jupyter-venv/
 - run notebooks
+
+3. dbt
+- dbt-core 1.10+ fusion-t hasznal, ami nm tamogatja a duckdbt-t
+- fox regebbi 1.8 dbt-corera van szukseg --> ez python 3.11-el komaptibilis csak
+- szoval telepitsd a python 3.11-et es azzal csinalj egy venv_dbt-t
+- abba telepitsd a requirement_dbt.txt-t a fixalt dbtduckdb connectort verzioval (dbt-core-t majd pip hozza teszi)
+- a venv_dbt a dbt folderban van, DE a dbt/currency_dbt az igazi dbt project folder (ott vana. dbt_project.yml), szoval abbol kell a dbt parancsokat inditani
+- igy tudod futatani, abban az esetben ha valahol a gepeden globalis dbt fusion van es az a default dbt --> ../<dbt_venv_neve>/bin/dbt run --> (../ mert egy könyvtarral kijebb van a venv_dbt)
