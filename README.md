@@ -1,37 +1,294 @@
-# dokumentacio:
-- Problemafelvetes --> törtenelmi fx adatok sek-röl szinte alig elehetöek, vagy fizetösek. Tözsdei kereskedes alap valutaja. SEK, ami devizakitettseget jelent USA, EU  es egyeb Nordik piacokon kereskedeskor.
-- Erre megoldas ez a pipeline:
-    - fetcheli a historikus adatokat (1x kell megtenni)
-    - fetcheli a napi adatokat (naponta, v ritkabban)
-    - json adatokat betölti egy duckdb fileba
-    - dbt transzformacio soran elöallnak a vegleges SEK-re vonatkoztatott valuta arfolyamok 1999-01-01-töl
-- Lehetöve teszi h legaölabb a devizakitettseg nagysagrendjet meg tudjuk becsulni historikus adatok alapjan.
+# 📊 FX Data Pipeline with Python, DuckDB, dbt, and Jupyter
 
-Projekt struktura:
-- databases --> duckdb file
-- jsons --> historikus es napi frissulö FX adatok JSON-ban tarolva
-- notebooks --> playground quick-and-dirty POC tesztelese
-- src --> vegleges production ready python scriptek
-- .env.example --> egy demo .env file, hogy milyen key-ekre van szukseg a futatashoz
-- requirements.txt --> venv blueprint
+A lightweight data pipeline to collect, store, transform, and explore historical foreign exchange (FX) data — with a focus on estimating currency exposure in financial analysis.
 
-How to use?
-1. Fetch FX data
-- pull the repo
-- create a venv to src in from requirements_src.txt
-- run the src/fetch_historical_fx_data.py to get the historical json files
-- run the src/fetch_new_fx_data.py to get the lates year's json file
+This project demonstrates a small modern analytics stack:
 
-2. Notebooks
-- create a venv to notebooks in from requirements_notebooks.txt
-- don't forget to register your venv kernel's and restart vs code
-    - https://web.archive.org/web/20240430135149/https://anbasile.github.io/posts/2017-06-25-jupyter-venv/
-- run notebooks
+**Python → DuckDB → dbt → Jupyter Notebooks**
 
-3. dbt
-- dbt-core 1.10+ fusion-t hasznal, ami nm tamogatja a duckdbt-t
-- fox regebbi 1.8 dbt-corera van szukseg --> ez python 3.11-el komaptibilis csak
-- szoval telepitsd a python 3.11-et es azzal csinalj egy venv_dbt-t
-- abba telepitsd a requirement_dbt.txt-t a fixalt dbtduckdb connectort verzioval (dbt-core-t majd pip hozza teszi)
-- a venv_dbt a dbt folderban van, DE a dbt/currency_dbt az igazi dbt project folder (ott vana. dbt_project.yml), szoval abbol kell a dbt parancsokat inditani
-- igy tudod futatani, abban az esetben ha valahol a gepeden globalis dbt fusion van es az a default dbt --> ../<dbt_venv_neve>/bin/dbt run --> (../ mert egy könyvtarral kijebb van a venv_dbt)
+---
+
+# 🚨 Problem Statement
+
+Historical FX data for many **exotic currencies** is often:
+
+- difficult to obtain
+- incomplete
+- hidden behind expensive data providers
+
+For financial analysis and trading, this becomes problematic.
+
+In my case, the **base trading currency is SEK (Swedish Krona)**.  
+When trading assets across global markets (US, EU, and Nordic markets), this creates **currency exposure**.
+
+To properly analyze portfolio performance and risk, it is important to estimate:
+
+- historical FX rates
+- exposure magnitude across currencies
+- the SEK-adjusted value of trades over time
+
+---
+
+# 💡 Solution
+
+This project implements a small data pipeline that:
+
+1. Fetches **historical FX data** from an API  
+2. Fetches **new daily FX updates**  
+3. Stores the raw data as **JSON files**  
+4. Loads the data into a **DuckDB database**  
+5. Uses **dbt transformations** to produce normalized FX tables  
+6. Allows analysis and visualization via **Jupyter notebooks**
+
+The final output is a clean FX dataset:
+
+📅 **Daily exchange rates vs SEK since 1999-01-01**
+
+This enables estimating historical currency exposure even when high-quality datasets are unavailable.
+
+---
+
+# 🏗️ Architecture
+
+```
+FX API
+│
+▼
+Python Fetch Scripts
+│
+▼
+JSON Storage
+│
+▼
+DuckDB Database
+│
+▼
+dbt Transformations
+│
+▼
+Clean FX Tables
+│
+▼
+Jupyter Notebooks (analysis & visualization)
+```
+
+---
+
+# 📂 Project Structure
+
+```
+project-root
+│
+├── databases/
+│   └── duckdb database files
+│
+├── jsons/
+│   ├── historical FX data
+│   └── daily FX updates
+│
+├── notebooks/
+│   └── exploratory analysis and visualizations
+│
+├── src/
+│   ├── fetch_historical_fx_data.py
+│   ├── fetch_new_fx_data.py
+│   └── load_json_to_duckdb.py
+│
+├── dbt/
+│   ├── venv_dbt/
+│   └── currency_dbt/
+│       └── dbt project
+│
+├── .env.example
+│
+├── requirements_src.txt
+├── requirements_notebooks.txt
+└── requirements_dbt.txt
+```
+
+---
+
+# ⚙️ Environment Setup
+
+Each major layer uses a **separate Python virtual environment**.
+
+This avoids dependency conflicts — especially with **dbt and DuckDB**.
+
+## Why separate environments?
+
+Recent versions of **dbt-core (1.10+) use the Fusion engine**, which **does not support DuckDB**.
+
+Therefore the project uses:
+
+- **dbt-core 1.8**
+- **Python 3.11**
+- pinned DuckDB connectors
+
+The other layers (Python scripts and notebooks) are flexible.
+
+---
+
+# 🔑 Environment Variables
+
+Create a `.env` file based on:
+
+```
+.env.example
+```
+
+Add your API key and configuration values there.
+
+---
+
+# 🚀 Usage
+
+## 1. Fetch FX Data
+
+Clone the repository:
+
+```bash
+git clone <repo_url>
+cd <repo>
+```
+
+Create a virtual environment for the Python scripts:
+
+```bash
+python -m venv venv_src
+source venv_src/bin/activate
+pip install -r requirements_src.txt
+```
+
+Fetch **historical FX data**:
+
+```bash
+python src/fetch_historical_fx_data.py
+```
+
+Fetch **latest FX data**:
+
+```bash
+python src/fetch_new_fx_data.py
+```
+
+Load JSON data into DuckDB:
+
+```bash
+python src/load_json_to_duckdb.py
+```
+
+---
+
+# 📦 dbt Transformations
+
+Install **Python 3.11**.
+
+Create a dbt environment:
+
+```bash
+python3.11 -m venv venv_dbt
+source venv_dbt/bin/activate
+pip install -r requirements_dbt.txt
+```
+
+Navigate to the dbt project:
+
+```bash
+cd dbt/currency_dbt
+```
+
+Run dbt:
+
+```bash
+dbt run
+```
+
+If you have a global dbt installation using Fusion, run explicitly from the venv:
+
+```bash
+../venv_dbt/bin/dbt run
+```
+
+---
+
+# 📓 Jupyter Notebooks
+
+Create the notebook environment:
+
+```bash
+python -m venv venv_notebooks
+source venv_notebooks/bin/activate
+pip install -r requirements_notebooks.txt
+```
+
+Register the kernel:
+
+```bash
+python -m ipykernel install --user --name fx-notebooks
+```
+
+Start Jupyter:
+
+```bash
+jupyter notebook
+```
+
+Use the notebooks for:
+
+- exploratory analysis
+- quick prototyping
+- visualizations
+
+---
+
+# 📈 Example Use Cases
+
+This dataset enables analysis such as:
+
+- estimating **historical currency exposure**
+- converting portfolio values to **SEK**
+- comparing **market returns vs FX-adjusted returns**
+- analyzing **FX volatility**
+
+---
+
+# ⚠️ Limitations
+
+- The pipeline is **user-triggered** (not orchestrated)
+- API reliability depends on the external provider
+- Historical data availability may vary by currency
+- dbt version is pinned due to DuckDB compatibility
+
+---
+
+# 🔮 Possible Future Improvements
+
+- add **Airflow / Prefect orchestration**
+- automate **daily FX ingestion**
+- add **data quality tests in dbt**
+- build a **dashboard layer (Streamlit / Superset / Sigma)**
+- migrate to **dbt Fusion once DuckDB support is available**
+
+---
+
+# 🛠️ Tech Stack
+
+| Layer | Tool |
+|------|------|
+| Data Fetching | Python |
+| Storage | DuckDB |
+| Transformations | dbt |
+| Analysis | Jupyter |
+| Data Format | JSON |
+
+---
+
+# 📜 License
+
+MIT License
+
+---
+
+# 👤 Author
+
+Personal data engineering project focused on building lightweight analytics pipelines using modern data tooling.
