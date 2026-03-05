@@ -12,49 +12,35 @@ models:
         description: >
           Surrogate primary key generated from rate_date and currency.
         tests:
-          - not_null:
-              arguments: {}
-              severity: warn
-          - unique:
-              arguments: {}
-              severity: warn
+          - not_null
+          - unique
 
       - name: rate_date
         description: >
           Calendar date of the FX observation.
         tests:
-          - not_null:
-              arguments: {}
-              severity: warn
+          - not_null
 
       - name: currency
         description: >
           Currency code expressed relative to SEK (e.g. USD, EUR, GBP, CHF, NOK).
         tests:
-          - not_null:
-              arguments: {}
-              severity: warn
+          - not_null
 
       - name: rate
         description: >
           FX rate expressed as units of target currency per 1 SEK.
         tests:
-          - not_null:
-              arguments: {}
-              severity: warn
+          - not_null
 
       - name: loaded_at_utc
         description: >
           Timestamp indicating when the raw FX record was ingested.
         tests:
-          - not_null:
-              arguments: {}
-              severity: warn
+          - not_null
 
     tests:
       - dbt_utils.unique_combination_of_columns:
-          arguments:
-            combination_of_columns:
-              - rate_date
-              - currency
-          severity: warn
+          combination_of_columns:
+            - rate_date
+            - currency

@@ -15,6 +15,9 @@ venv/
 ENV/
 env/
 .venv/
+src/venv_src/
+notebooks/venv_notebooks/
+dbt/venv_dbt
 
 # Jupyter
 .ipynb_checkpoints/

@@ -13,7 +13,6 @@ models:
           Source filename of the ingested JSON file.
         tests:
           - not_null:
-              arguments: {}
               severity: warn
 
       - name: loaded_at_utc
@@ -21,7 +20,6 @@ models:
           UTC timestamp when the file was ingested.
         tests:
           - not_null:
-              arguments: {}
               severity: warn
 
       - name: rate_date
@@ -29,7 +27,6 @@ models:
           Date of the exchange rate observation.
         tests:
           - not_null:
-              arguments: {}
               severity: warn
 
       - name: currency_pair
@@ -37,7 +34,6 @@ models:
           Currency pair code (e.g., USDANG, USDAUD).
         tests:
           - not_null:
-              arguments: {}
               severity: warn
 
       - name: rate
@@ -45,5 +41,4 @@ models:
           Exchange rate value for the given currency pair and date.
         tests:
           - not_null:
-              arguments: {}
               severity: warn
